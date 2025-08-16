@@ -4,22 +4,31 @@ pkgver=1.0.0
 pkgrel=1
 pkgdesc="Helwan Package Manager - a simple package manager frontend for Arch Linux."
 arch=('x86_64')
-url="https://github.com/helwan-linux/hpm"
+url="https://github.com/helwan-linux/helwan-pkg-manager"
 license=('MIT')
 depends=('python-rich' 'python-typer' 'python' 'sudo' 'pacman')
-makedepends=('git' 'python-build' 'python-installer')
-provides=('hpm')
-source=("git+https://github.com/helwan-linux/hpm.git")
+source=("git+https://github.com/helwan-linux/helwan-pkg-manager.git")
 md5sums=('SKIP')
 
 build() {
-  # Change directory to the source folder containing the pyproject.toml file
-  cd "$srcdir/$pkgname/$pkgname"
-  python -m build
+    cd "$srcdir/helwan-pkg-manager"
+    # لا build حقيقي لأننا لا نستخدم setup.py
+    :
 }
 
 package() {
-  # Change directory to the same source folder for the installation
-  cd "$srcdir/$pkgname/$pkgname"
-  python -m installer --destdir="$pkgdir" dist/*.whl
+    cd "$srcdir/helwan-pkg-manager"
+
+    mkdir -p "$pkgdir/usr/bin"
+    # wrapper script
+    cat > "$pkgdir/usr/bin/hpm" <<'EOF'
+#!/usr/bin/env bash
+PYTHONPATH=/usr/lib/hpm python3 /usr/lib/hpm/main.py "$@"
+EOF
+    chmod +x "$pkgdir/usr/bin/hpm"
+
+    mkdir -p "$pkgdir/usr/lib/hpm"
+    cp -r hpm/* "$pkgdir/usr/lib/hpm/"
+    cp -r hpm/assets "$pkgdir/usr/lib/hpm/assets"
 }
+
