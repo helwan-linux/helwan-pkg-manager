@@ -26,12 +26,8 @@ hpm = "hpm.main:main"
 
 
 [project.urls]
-Homepage = "https://github.com/helwan-linux/hpm"
-Repository = "https://github.com/helwan-linux/hpm"
+Homepage = "https://github.com/helwan-linux/helwan-pkg-manager"
+Repository = "https://github.com/helwan-linux/helwan-pkg-manager"
 
 [tool.setuptools.packages.find]
 where = ["."]
-
-
-
-
